@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html unselectable="on" style="-webkit-user-select: none;">
+
+<head>
+    <!--All coded and designed by Ooya, for Ludum Dare #30-->
+    <meta charset="utf-8">
+    <title>Ludum Dare #30</title>
+    <link href='https://fonts.googleapis.com/css?family=Sigmar+One' rel='stylesheet' type='text/css'>
+    <style>
+        html {
+            background: url(https://i.imgur.com/WKpfRUS.jpg) no-repeat center center fixed;  
+        }
+        .world {
+            margin: 0px;
+            padding: 0px;
+            text-align: center;
+            width: 49%;
+            height: 41%;
+            display: inline-block;
+            overflow: auto;
+            border: solid 1px #ccc;
+        }
+        .ontop {
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: none;
+            position: absolute;
+            background-color: #272727;
+            color: #aaaaaa;
+            opacity: .9;
+        }
+        #popup {
+            width: 750px;
+            height: 300px;
+            position: absolute;
+            color: #000000;
+            background-color: #ffffff;
+            top: 50%;
+            left: 50%;
+            margin-top: -150px;
+            margin-left: -375px;
+        }
+        #boutonPrincipal {
+            display: block;
+            margin: 0px auto 0px auto;
+            padding: 0px;
+            cursor: pointer;
+            background-color: transparent;
+            border-color: transparent;
+            height: 18%;
+            width: auto;
+            max-height: 128px;
+            max-width: 128px;
+        }
+        #worldA {
+            margin-left: 0.5%;
+            margin-top: 0.5%;
+            background-size: cover;
+        }
+        #worldB {
+            margin-top: 0.5%;
+            background-size: cover;
+        }
+        #worldC {
+            margin-left: 0.5%;
+            background-size: cover;
+        }
+        #worldD {
+            background-size: cover;
+        }
+        #dustCount {
+            color: #00c799;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        function pop(div) {
+            document.getElementById(div).style.display = 'block';
+        }
+
+        function hide(div) {
+            document.getElementById(div).style.display = 'none';
+        }
+         //To detect escape button
+        document.onkeydown = function (evt) {
+            evt = evt || window.event;
+            if (evt.keyCode == 27) {
+                hide('popDiv');
+            }
+        };
+    </script>
+    <script language="JavaScript" type="text/javascript">
+        var nbDust = 0;
+        var nbDustWorldA = 0;
+        var nbDustWorldB = 0;
+        var nbDustWorldC = 0;
+        var nbDustWorldD = 0;
+        var nbGathererA = 0;
+        var nbGathererB = 0;
+        var nbGathererC = 0;
+        var nbGathererD = 0;
+        var gathererCostA = 10;
+        var gathererCostB = 10;
+        var gathererCostC = 10;
+        var gathererCostD = 10;
+
+        $(function () {
+            $('#boutonPrincipal').on('click', function () {
+                nbDust++;
+            });
+            $('#putDustInA').on('click', function () {
+                nbDustWorldA += nbDust;
+                nbDust = 0;
+            });
+            $('#putDustInB').on('click', function () {
+                nbDustWorldB += nbDust;
+                nbDust = 0;
+            });
+            $('#putDustInC').on('click', function () {
+                nbDustWorldC += nbDust;
+                nbDust = 0;
+            });
+            $('#putDustInD').on('click', function () {
+                nbDustWorldD += nbDust;
+                nbDust = 0;
+            });
+            $('#summonGathererInA').on('click', function () {
+                nbGathererA++;
+                nbDustWorldA -= gathererCostA;
+                gathererCostA = Math.ceil(gathererCostA * 1.16);
+            });
+            $('#summonGathererInB').on('click', function () {
+                nbGathererB++;
+                nbDustWorldB -= gathererCostB;
+                gathererCostB = Math.ceil(gathererCostB * 1.16);
+            });
+            $('#summonGathererInC').on('click', function () {
+                nbGathererC++;
+                nbDustWorldC -= gathererCostC;
+                gathererCostC = Math.ceil(gathererCostC * 1.16);
+            });
+            $('#summonGathererInD').on('click', function () {
+                nbGathererD++;
+                nbDustWorldD -= gathererCostD;
+                gathererCostD = Math.ceil(gathererCostD * 1.16);
+            });
+            $('#sendBackFromA').on('click', function () {
+                nbDust += nbDustWorldA;
+                nbDustWorldA = 0;
+            });
+            $('#sendBackFromB').on('click', function () {
+                nbDust += nbDustWorldB;
+                nbDustWorldB = 0;
+            });
+            $('#sendBackFromC').on('click', function () {
+                nbDust += nbDustWorldC;
+                nbDustWorldC = 0;
+            });
+            $('#sendBackFromD').on('click', function () {
+                nbDust += nbDustWorldD;
+                nbDustWorldD = 0;
+            });
+        });
+
+        window.setInterval(function () {
+            nbDustWorldA += (nbGathererA * 1 / 100);
+            nbDustWorldB += (nbGathererB * 1 / 100);
+            nbDustWorldC += (nbGathererC * 1 / 100);
+            nbDustWorldD += (nbGathererD * 1 / 100);
+
+            $('#gathererCountA').text(nbGathererA);
+            $('#gathererCountB').text(nbGathererB);
+            $('#gathererCountC').text(nbGathererC);
+            $('#gathererCountD').text(nbGathererD);
+
+            $('#dustCount').text(Math.floor(nbDust));
+
+            $('#dustCountA').text(Math.floor(nbDustWorldA));
+            $('#dustCountB').text(Math.floor(nbDustWorldB));
+            $('#dustCountC').text(Math.floor(nbDustWorldC));
+            $('#dustCountD').text(Math.floor(nbDustWorldD));
+
+            $('#summonGathererInA').text('Summon a Gatherer in Abrargel (' + gathererCostA + ')');
+            $('#summonGathererInB').text('Summon a Gatherer in Becifon (' + gathererCostB + ')');
+            $('#summonGathererInC').text('Summon a Gatherer in Camaluth (' + gathererCostC + ')');
+            $('#summonGathererInD').text('Summon a Gatherer in Daiathel (' + gathererCostD + ')');
+
+            $('#summonGathererInA').prop('disabled', gathererCostA > nbDustWorldA);
+            $('#summonGathererInB').prop('disabled', gathererCostB > nbDustWorldB);
+            $('#summonGathererInC').prop('disabled', gathererCostC > nbDustWorldC);
+            $('#summonGathererInD').prop('disabled', gathererCostD > nbDustWorldD);
+
+            if (nbDustWorldA <= 0) {
+                $('#worldA').css("background-image", "url(https://i.imgur.com/cc7j3Br.png)");
+            } else if (nbDustWorldA > 0 && nbDustWorldA <= 100) {
+                $('#worldA').css("background-image", "url(https://i.imgur.com/K5wZyTv.png)");
+            } else if (nbDustWorldA > 100 && nbDustWorldA <= 1000) {
+                $('#worldA').css("background-image", "url(https://i.imgur.com/69lsjGH.png)");
+            } else if (nbDustWorldA > 1000 && nbDustWorldA <= 10000) {
+                $('#worldA').css("background-image", "url(https://i.imgur.com/PEXy6tP.png)");
+            } else if (nbDustWorldA > 10000) {
+                $('#worldA').css("background-image", "url(https://i.imgur.com/T6T6ykE.png)");
+            }
+
+            if (nbDustWorldB <= 0) {
+                $('#worldB').css("background-image", "url(https://i.imgur.com/cc7j3Br.png)");
+            } else if (nbDustWorldB > 0 && nbDustWorldB <= 100) {
+                $('#worldB').css("background-image", "url(https://i.imgur.com/K5wZyTv.png)");
+            } else if (nbDustWorldB > 100 && nbDustWorldB <= 1000) {
+                $('#worldB').css("background-image", "url(https://i.imgur.com/69lsjGH.png)");
+            } else if (nbDustWorldB > 1000 && nbDustWorldB <= 10000) {
+                $('#worldB').css("background-image", "url(https://i.imgur.com/PEXy6tP.png)");
+            } else if (nbDustWorldB > 10000) {
+                $('#worldB').css("background-image", "url(https://i.imgur.com/T6T6ykE.png)");
+            }
+
+            if (nbDustWorldC <= 0) {
+                $('#worldC').css("background-image", "url(https://i.imgur.com/cc7j3Br.png)");
+            } else if (nbDustWorldC > 0 && nbDustWorldC <= 100) {
+                $('#worldC').css("background-image", "url(https://i.imgur.com/K5wZyTv.png)");
+            } else if (nbDustWorldC > 100 && nbDustWorldC <= 1000) {
+                $('#worldC').css("background-image", "url(https://i.imgur.com/69lsjGH.png)");
+            } else if (nbDustWorldC > 1000 && nbDustWorldC <= 10000) {
+                $('#worldC').css("background-image", "url(https://i.imgur.com/PEXy6tP.png)");
+            } else if (nbDustWorldC > 10000) {
+                $('#worldC').css("background-image", "url(https://i.imgur.com/T6T6ykE.png)");
+            }
+
+            if (nbDustWorldD <= 0) {
+                $('#worldD').css("background-image", "url(https://i.imgur.com/cc7j3Br.png)");
+            } else if (nbDustWorldD > 0 && nbDustWorldD <= 100) {
+                $('#worldD').css("background-image", "url(https://i.imgur.com/K5wZyTv.png)");
+            } else if (nbDustWorldD > 100 && nbDustWorldD <= 1000) {
+                $('#worldD').css("background-image", "url(https://i.imgur.com/69lsjGH.png)");
+            } else if (nbDustWorldD > 1000 && nbDustWorldD <= 10000) {
+                $('#worldD').css("background-image", "url(https://i.imgur.com/PEXy6tP.png)");
+            } else if (nbDustWorldD > 10000) {
+                $('#worldD').css("background-image", "url(https://i.imgur.com/T6T6ykE.png)");
+            }
+        }, 10);
+    </script>
+</head>
+
+<body style="position:absolute;margin: 0px;padding: 0px;width: 100%;height: 100%;overflow:hidden;color:#2D58E7;font-family: 'Sigmar One', cursive;font-size: larger;" onload="pop('popDiv')">
+    <div id="popDiv" class="ontop">
+        <table border="1" id="popup">
+            <tr>
+                <td>
+                    STEP 1 - SMASH THE MAGIC CRYSTAL TO COLLECT DUST <br/>
+                    STEP 2 - INVEST YOUR DUST IN YOUR FAVORITE WORLD <br/>
+                    STEP 3 - SUMMON MALEFICS MINIONS TO MAKE YOUR OWN WORK <br/>
+                    STEP 4 - WATCH YOUR WORLDS GROWING <br/>
+                    STEP 5 - ... <br/>
+                    STEP 6 - DOMINATE THE UNIVERSE <br/>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center;">
+                    <a href="#" onClick="hide('popDiv')">CLICK HERE TO START PLAYING</a>
+                    <p>Ludum Dare #30</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="worldA" class="world">
+        <p>Abrargel</p>
+        <p>Dust : <span id="dustCountA">0</span>
+        </p>
+        <p>Gatherers : <span id="gathererCountA">0</span>
+        </p>
+        <button id="putDustInA">Put Dust in Abrargel</button>
+        <button id="summonGathererInA">Summon a Gatherer in Abrargel</button>
+        <button id="sendBackFromA">Send Dust to the Magic Crystal</button>
+    </div>
+    <div id="worldB" class="world">
+        <p>Becifon</p>
+        <p>Dust : <span id="dustCountB">0</span>
+        </p>
+        <p>Gatherers : <span id="gathererCountB">0</span>
+        </p>
+        <button id="putDustInB">Put Dust in Becifon</button>
+        <button id="summonGathererInB">Summon a Gatherer in Becifon</button>
+        <button id="sendBackFromB">Send Dust to the Magic Crystal</button>
+    </div>
+    <button id="boutonPrincipal">
+        <div style="position: absolute;"><span id="dustCount">0</span>
+        </div>
+        <img src="https://i.imgur.com/AL9Hzbb.png" width="auto" height="100%" />
+    </button>
+
+    <div id="worldC" class="world">
+        <p>Camaluth</p>
+        <p>Dust : <span id="dustCountC">0</span>
+        </p>
+        <p>Gatherers : <span id="gathererCountC">0</span>
+        </p>
+        <button id="putDustInC">Put Dust in Camaluth</button>
+        <button id="summonGathererInC">Summon a Gatherer in Camaluth</button>
+        <button id="sendBackFromC">Send Dust to the Magic Crystal</button>
+    </div>
+    <div id="worldD" class="world">
+        <p>Daiathel</p>
+        <p>Dust : <span id="dustCountD">0</span>
+        </p>
+        <p>Gatherers : <span id="gathererCountD">0</span>
+        </p>
+        <button id="putDustInD">Put Dust in Daiathel</button>
+        <button id="summonGathererInD">Summon a Gatherer in Daiathel</button>
+        <button id="sendBackFromD">Send Dust to the Magic Crystal</button>
+    </div>
+</body>
+
+</html>
